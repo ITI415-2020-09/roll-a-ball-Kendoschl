@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class playerController : MonoBehaviour
 {
     public float speed = 0;
+    public TextMeshProUGUI countText;
+    public GameObject winTextObject;
 
     private Rigidbody rb;
+    private int count;
 
     private float movementX;
     private float movementY;
@@ -16,6 +20,15 @@ public class playerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // Set the count to zero 
+        count = 0;
+
+        SetCountText();
+
+        // Set the text property of the Win Text UI to an empty string, making the 'You Win' (game over message) blank
+        winTextObject.SetActive(false);
+
     }
 
     private void OnMove(InputValue movementValue)
@@ -38,6 +51,23 @@ public class playerController : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
+
+            // Add one to the score variable 'count'
+            count = count + 1;
+
+            // Run the 'SetCountText()' function (see below)
+            SetCountText();
+        }
+    }
+
+    void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+
+        if (count >= 12)
+        {
+            // Set the text value of your 'winText'
+            winTextObject.SetActive(true);
         }
     }
 }
